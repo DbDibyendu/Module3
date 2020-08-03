@@ -1,0 +1,1 @@
+/usr/bin/cc  -O2 -D_GNU_SOURCE  -Wformat=2 -Wall -Wextra -Winline -pipe -fPIC -O3 -DNDEBUG CMakeFiles/problem1.dir/problem1.c.o -o problem1 
