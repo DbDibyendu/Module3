@@ -132,7 +132,7 @@ const char *IP_ADDRESS()
 /** 
  *  @brief DeviceId
  *  
- *  Gets the deviceId
+ *  Gets the deviceId from /etc/shunya/deviceid
  *
  *  @return returns deviceId
  */
@@ -209,7 +209,7 @@ int main (void)
         printf("Address: \"%s\"\n",ipAddress);                             
         printf("device: \"%s\"\n",eventType);
         printf("timestamp: %s\n",time);
-    //    strcpy(deviceId,DEVICE_ID());
+        strcpy(deviceId,DEVICE_ID());
         printf("deviceId: \"%s\"\n",deviceId);
     
     // Creating message which will be sent to the MQTT Server
