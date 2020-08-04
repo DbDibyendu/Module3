@@ -15,8 +15,4 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 # Add rules to create the binary files
 add_executable(problem1 problem1.c)
 add_executable(problem2 problem2.c)
-add_executable(problem3 problem3.c)
 
-target_link_libraries(problem1 PUBLIC  -lm -lshunyaInterfaces_core)
-target_link_libraries(problem2 PUBLIC  -lm -lshunyaInterfaces_core)
-target_link_libraries(problem3 PUBLIC  -lm -lshunyaInterfaces_core)
