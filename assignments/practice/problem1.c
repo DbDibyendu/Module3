@@ -25,7 +25,7 @@
 #include <string.h> /* for strncpy */
 #include <errno.h>
 #include <time.h>
-#include "MQTTClient.h"
+#include "MQTTClient.h"             // download this and include this from "https://github.com/eclipse/paho.mqtt.c"
 
 /* includes for ipAddress */
 #include <sys/types.h>
@@ -252,7 +252,8 @@ int main (void)
     MQTTClient_destroy(&client);
     return rc;
     
-    // Compile and run using command gcc problem1.c -lpaho-mqtt3c
+    // Compile and run using command "gcc problem1.c -lpaho-mqtt3c"
+
 }
 
 

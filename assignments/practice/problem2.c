@@ -1,7 +1,8 @@
 /** @file problem2.c
  *  @brief Barcode reader
  *  
- *  Reading the barcode and printing it
+ *  Reading the barcode from item and getting the information about the product from website
+ *  and printing the information on screen
  *  
  *  @author Dibyendu 
  *  @bug I didn't find any  
@@ -23,6 +24,9 @@
 #include <errno.h>
 #include <string.h>
 #include <stdbool.h>
+#include "requests.h"         // https://github.com/offlinemark/librequests go to this website to add the header file "requests.h"
+
+
 /* --- Project Includes --- */
 
 /* Global Variables */
@@ -40,7 +44,6 @@ void unix_error(char *msg) /* unix-style error */
     exit(0);
 }
 /* $end unixerror */
-
 void posix_error(int code, char *msg) /* posix-style error */
 {
     fprintf(stderr, "%s: %s\n", msg, strerror(code));
@@ -126,12 +129,15 @@ void Fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
 /** 
  *  @brief Barcode Reader
  *  
- *  Full description of the function
+ *  Reads the barcode from a dictionay hid and hid2
  *
- *  @return List all Function returns 
+ *  @return ss (barcode in required format) 
  */
 
-  char *barcode_reader(){
+char *barcode_reader(){
+    
+    /* Creating a dictionary using 52X2 2d array and passing the values hid[i][1] to replace hid[i][o]   */
+
       char hid[52][2] = { 4,'a', 5, 'b', 6, 'c', 7, 'd', 8, 'e', 9, 'f', 10, 'g', 11, 'h', 12, 'i', 13, 'j', 14, 'k', 15, 'l', 16, 'm',
            17, 'n', 18, 'o', 19, 'p', 20, 'q', 21, 'r', 22, 's', 23, 't', 24, 'u', 25, 'v', 26, 'w', 27, 'x', 28, 'y',
            29, 'z', 30, '1', 31, '2', 32, '3', 33, '4', 34, '5', 35, '6', 36, '7', 37, '8', 38, '9', 39, '0', 44, ' ',
@@ -194,43 +200,70 @@ void Fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
     return ss;
 }
 /** 
- *  @brief Barcode Reader
+ *  @brief UPC lookup
  *  
- *  Full description of the function
+ *  FChecks the item present in upcdatabase through barcode and prints it
  *
  *  @return List all Function returns 
  */
 
 void UPC_Lookup(char *api_key,char *upc){
+    // V3 API
+    char url[100]="https://api.upcdatabase.org/product/";
+    strcat(url,upc);
+    strcat(url,"/");
+    strcat(url,api_key);
+
+    req_t req;                     /* declare struct used to store data */
+    int ret = requests_init(&req); /* setup */
+    if (ret) {
+        return 1;
+    }
+    requests_get(&req, url); /* submit GET request */
+
+
+    for(int i =0;i<5;i++)
+        printf("-----");
+    
+    printf("%s", upc);                                  // prints the upc code  
+
+    printf("Request URL: %s\n", req.url);               // prints the url of the rquested code
+    printf("Requied item:\n%s", req.text);              // prints the details of the item in html format
+
+    for(int i =0;i<5;i++)
+        printf("-----");
+    printf("\n");
+
+    requests_close(&req); /* clean up */
+
+    return 0;    
 
 }
 
 /** 
  *  @brief Description on main
  *  
- *  Full description of the function
+ *  Call the UPC_Lookup function and execute the barcode reading function
  *
  *  @return List all Function returns 
  */
 
 int main (void)
 {
-      char buffer[100]="dibyendu";
-      strcpy(buffer,barcode_reader());
-      int l=strlen(buffer);
-            for(int i=0;i<l;i++){
-                printf("%c",buffer[i]);
-            }
-              for(int i=0;i<l;i++){
-                if(buffer[i]>0){
-                    printf("%d ",buffer[i]);
-                    
-                }
+        int x;
 
+        do{
+            printf("Press any number to exit and 0 to continue\n");
+            UPC_Lookup(api_key,barcode_reader());                       // calling UPC_lookup function
+            scanf("%d",&x);
+            if(x!=0){
+                break;                                              // break out the loop if user inputs number
             }
-
+        }while(1);
 
         /*Make sure you comment every line */
         return 0;
+
+        // Type "gcc  problem2.c -L. -lrequests -lcurl" to compile this program
         
 }
