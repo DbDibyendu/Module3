@@ -201,7 +201,7 @@ char *barcode_reader(){
 /** 
  *  @brief Description on main
  *  
- *  Call the UPC_Lookup function and execute the barcode reading function
+ *  Call the barcode_reader() function and print the product information
  *
  *  @return List all Function returns 
  */
