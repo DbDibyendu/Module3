@@ -32,7 +32,7 @@
  char ss[100]="";
 
 /************************** 
- * Error-handling functions
+ * Error-handling function
  **************************/
 /* $begin errorfuns */
 /* $begin unixerror */
@@ -155,7 +155,7 @@ char *barcode_reader(){
             Fgets(buffer,8,fp);
             int l=strlen(buffer);
             for(int i=0;i<l;i++){
-                if(buffer[i][0]>0){
+                if(buffer[i]>0){
                     // 40 is carriage return which signifies
                     // we are done looking for characters
                     if(buffer[i]==40){
