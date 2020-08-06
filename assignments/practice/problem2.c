@@ -24,13 +24,11 @@
 #include <errno.h>
 #include <string.h>
 #include <stdbool.h>
-#include "requests.h"         // https://github.com/offlinemark/librequests go to this website to add the header file "requests.h"
 
 
 /* --- Project Includes --- */
 
 /* Global Variables */
- char api_key[100]= "";                      // https://upcdatabase.org/
  char ss[100]="";
 
 /************************** 
@@ -157,7 +155,7 @@ char *barcode_reader(){
             Fgets(buffer,8,fp);
             int l=strlen(buffer);
             for(int i=0;i<l;i++){
-                if(buffer[i]>0){
+                if(buffer[i][0]>0){
                     // 40 is carriage return which signifies
                     // we are done looking for characters
                     if(buffer[i]==40){
@@ -199,46 +197,6 @@ char *barcode_reader(){
         }
     return ss;
 }
-/** 
- *  @brief UPC lookup
- *  
- *  FChecks the item present in upcdatabase through barcode and prints it
- *
- *  @return List all Function returns 
- */
-
-void UPC_Lookup(char *api_key,char *upc){
-    // V3 API
-    char url[100]="https://api.upcdatabase.org/product/";
-    strcat(url,upc);
-    strcat(url,"/");
-    strcat(url,api_key);
-
-    req_t req;                     /* declare struct used to store data */
-    int ret = requests_init(&req); /* setup */
-    if (ret) {
-        return 1;
-    }
-    requests_get(&req, url); /* submit GET request */
-
-
-    for(int i =0;i<5;i++)
-        printf("-----");
-    
-    printf("%s", upc);                                  // prints the upc code  
-
-    printf("Request URL: %s\n", req.url);               // prints the url of the rquested code
-    printf("Requied item:\n%s", req.text);              // prints the details of the item in html format
-
-    for(int i =0;i<5;i++)
-        printf("-----");
-    printf("\n");
-
-    requests_close(&req); /* clean up */
-
-    return 0;    
-
-}
 
 /** 
  *  @brief Description on main
@@ -254,7 +212,7 @@ int main (void)
 
         do{
             printf("Press any number to exit and 0 to continue\n");
-            UPC_Lookup(api_key,barcode_reader());                       // calling UPC_lookup function
+            printf("\n %s \n",barcode_reader());                     // calling UPC_lookup function
             scanf("%d",&x);
             if(x!=0){
                 break;                                              // break out the loop if user inputs number
